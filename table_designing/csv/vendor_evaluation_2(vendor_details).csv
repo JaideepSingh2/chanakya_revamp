@@ -1,0 +1,153 @@
+﻿Vertical,Budget Head,Sub Budget Head,Fields,Data Type,Values
+Channel Partner,Telecallers,NA,Name,Option set,Onboarded vendors for this budget head and vertical
+,,,Pricing,String,
+,,,Payment Term,Option set,"[15 days post submission of notice, 30 days post submission of notice, 45 days post submission of notice]"
+,,,Quality of Callers,Option set,1 to 5
+,WhatsApp Blast,,Name,Option set,Onboarded vendors for this budget head and vertical
+,,,Pricing,String,
+,,,Payment Term,Option set,"[15 days post submission of notice, 30 days post submission of notice, 45 days post submission of notice]"
+,,,Quality of Callers,Option set,1 to 5
+,Cars for Market,,Name,Option set,Onboarded vendors for this budget head and vertical
+,,,Pricing,String,
+,,,Payment Term,Option set,"[15 days post submission of notice, 30 days post submission of notice, 45 days post submission of notice, 50% in advance rest in post submission of notice]"
+,CP other support,,Name,Option set,Onboarded vendors for this budget head and vertical
+,,,Pricing,String,
+,,,Remarks,String,
+,SMS DND,,Name,Option set,Onboarded vendors for this budget head and vertical
+,,,Pricing,String,
+,,,SMS Delivery Ratio,string,
+,,,re-credits,choice,yes or no
+Presales,Contact Centre,,Name,Option set,Onboarded vendors for this budget head and vertical
+,,,Pricing,String,
+,,,Payment Term,Option set,"[15 days post submission of invoice, 30 days post submission of invoice, 45 days post submission of invoice, 50 % advance and rest post submission of invoice 30 days]"
+,,,Quality of Callers,Option set,1 to 5
+,SMS Support,,Name,Option set,Onboarded vendors for this budget head and vertical
+,,,Pricing,String,
+,,,SMS Delivery Ratio,string,
+,,,re-credits,choice,yes or no
+,Whatsapp Support,,Name,Option set,Onboarded vendors for this budget head and vertical
+,,,Pricing,String,
+,,,Payment Term,Option set,"[15 days post submission of notice, 30 days post submission of notice, 45 days post submission of notice]"
+,,,META Availability,choice,yes or no
+,Vouchers,,Name,Option set,Onboarded vendors for this budget head and vertical
+,,,Discount,String,
+,,,Remarks,String,
+,,,Payment Term,Option set,"[15 days post submission of notice, 30 days post submission of notice, 45 days post submission of notice, 100% in advance]"
+,Data Procurement,,Name,Option set,Onboarded vendors for this budget head and vertical
+,,,Remarks,String,
+,,,Payment Term,Option set,"[15 days post submission of notice, 30 days post submission of notice, 45 days post submission of notice, 100% in advance]"
+,Presales Other Support,,Name,Option set,Onboarded vendors for this budget head and vertical
+,,,Remarks,String,
+,,,Pricing,String,
+,IVR,,Name,Option set,Onboarded vendors for this budget head and vertical
+,,,Call for connected Ratio,String,
+,,,Pricing,String,
+,RCS,,Name,Option set,Onboarded vendors for this budget head and vertical
+,,,Pricing,String,
+,,,RCS Delivery Ratio,string,
+,,,Re-Credits,string,
+Marketing,Print Media,,Name,Option set,Onboarded vendors for this budget head and vertical
+,,,Pricing,String,
+,,,Availability,choice set,yes or no
+,,,Cancellation Policy,choice set,yes or no
+,,,Product Name,string,
+,,,Reach Location,string,
+,Outdoor (OOH),,Name,Option set,Onboarded vendors for this budget head and vertical
+,,,Pricing,String,
+,,,Location,String,
+,,,Site Availability,String,
+,Radio,,Name,Option set,Onboarded vendors for this budget head and vertical
+,,,Pricing,String,
+,,,Product Name,String,
+,,,Station Popularity,String,
+,Collateral,,Name,Option set,Onboarded vendors for this budget head and vertical
+,,,Pricing,String,
+,,,Quality of Product,option set,1 to 5
+,,,Product Name,string,
+,,,Timeline of delivery,option set,1 to 5
+,Film Production + Drone Shoot + AV,,Name,Option set,Onboarded vendors for this budget head and vertical
+,,,Pricing,String,
+,,,Industry Expertise,option set,1 to 5
+,,,Technical Experience,option set,1 to 5
+,,,On Time Delivery,option set,1 to 5
+,Images / Photo Shot / Renders,,Name,Option set,Onboarded vendors for this budget head and vertical
+,,,Pricing,String,
+,,,Finesse,option set,1 to 5
+,,,Product Delivery,string,
+,Site Branding,,Name,Option set,Onboarded vendors for this budget head and vertical
+,,,Pricing,String,
+,,,Quality,option set,1 to 5
+,,,On Time Delivery,option set,1 to 5
+,Creative Agency,,Name,Option set,Onboarded vendors for this budget head and vertical
+,,,Pricing,String,
+,,,Category Expertise,option set,1 to 5
+,,,On Time Delivery capability,option set,1 to 5
+,,,Previous Clients Performance Rating,option set,1 to 5
+,Other Expenses - Marketing,,Name,Option set,Onboarded vendors for this budget head and vertical
+,,,Pricing,String,
+,,,Product,String,
+,,,Remarks,String,
+,BTL Carnival: Engaging Activities,,Name,Option set,Onboarded vendors for this budget head and vertical
+,,,Pricing,String,
+,,,Remarks,String,
+,Premium Mobile Number,,Name,Option set,Onboarded vendors for this budget head and vertical
+,,,Pricing,String,
+,,,Remarks,String,
+,Scale Model,,Name,Option set,Onboarded vendors for this budget head and vertical
+,,,Pricing,String,
+,,,Remarks,String,
+,Influencer / Exhibition,,Name,Option set,Onboarded vendors for this budget head and vertical
+,,,Pricing,String,
+,,,Remarks,String,
+,Swiggy / Zomato / Similar Platforms,,Name,Option set,Onboarded vendors for this budget head and vertical
+,,,Pricing,String,
+,,,Remarks,String,
+,Railway Platform Branding,,Name,Option set,Onboarded vendors for this budget head and vertical
+,,,Pricing,String,
+,,,Remarks,String,
+Strategy,Buffer,,Name,Option set,Onboarded vendors for this budget head and vertical
+,,,Pricing,String,
+,,,Remarks,String,
+Events,Venue,,Name,Option set,Onboarded vendors for this budget head and vertical
+,,,Rating,option set,1 to 5
+,Production,,Name,Option set,Onboarded vendors for this budget head and vertical
+,,,Quality of Work/Service,String,
+,,,Payment Term,Option set,"[15 days post submission of notice, 30 days post submission of notice, 45 days post submission of notice, 100% in advance]"
+,Cabs,,Name,Option set,Onboarded vendors for this budget head and vertical
+,,,Quality of Work/Service,String,
+,,,Payment Term,Option set,"[15 days post submission of notice, 30 days post submission of notice, 45 days post submission of notice, 100% in advance]"
+,Others - Events,,Name,Option set,Onboarded vendors for this budget head and vertical
+,,,Quality of Work/Service,String,
+,,,Payment Term,Option set,"[15 days post submission of notice, 30 days post submission of notice, 45 days post submission of notice, 100% in advance]"
+Digital,Digital - Performance,,Name,Option set,Onboarded vendors for this budget head and vertical
+,,,Management Fee,string,
+,,,Scale of Budget Handled,Option set,"upto 30 lakhs, 30 lakhs to 70 lakhs, 70 lakhs to 1 crore, 1 crore & above"
+,,,Previous Clients,string,
+,,,Industry Experience,string,
+,,,Previous Clients Performance quality,option set,1 to 5
+,Digital - Awareness,,Name,Option set,Onboarded vendors for this budget head and vertical
+,,,Scale of Budget Handled,Option set,"upto 30 lakhs, 30 lakhs to 70 lakhs, 70 lakhs to 1 crore, 1 crore & above"
+,,,Previous Clients,string,
+,,,Industry Experience,string,
+,,,Previous Clients Performance quality,option set,1 to 5
+,Tech and Automation,,Name,Option set,Onboarded vendors for this budget head and vertical
+,,,Previous Clients,string,
+,,,Quality of previous Work,option set,1 to 5
+,,,Pricing,String,
+,Digital Contact Centre,,Name,Option set,Onboarded vendors for this budget head and vertical
+,,,Pricing,String,
+,,,Payment Term,Option set,"[15 days post submission of invoice, 30 days post submission of invoice, 45 days post submission of invoice, 50% in advance and rest post submission of invoice 30 days]"
+,,,Quality of Callers,option set,1 to 5
+,Digital - SMS,,Name,Option set,Onboarded vendors for this budget head and vertical
+,,,Pricing,String,
+,,,SMS Delivery Ratio,String,
+,,,Re-Credits,option set,1 to 5
+,Digital - Whatsapp,,Name,Option set,Onboarded vendors for this budget head and vertical
+,,,Pricing,String,
+,,,Payment Term,Option set,"[15 days post submission of invoice, 30 days post submission of invoice, 45 days post submission of invoice]"
+,,,Quality of Callers,option set,1 to 5
+,,,META Availability,choice set,yes or no
+,Digital - Vouchers,,Name,Option set,Onboarded vendors for this budget head and vertical
+,,,Discount,String,
+,,,Remarks,String,
+,,,Payment Term,Option set,"[15 days post submission of invoice, 30 days post submission of invoice, 45 days post submission of invoice]"
