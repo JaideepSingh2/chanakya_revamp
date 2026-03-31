@@ -1,4 +1,4 @@
-## 1. Master Data Tables
+## 1. Tables
 
 ### 1.1 Project (`xr_project`)
 
@@ -32,8 +32,6 @@ Stores the allocated budget for each Project + Category (Budget Head) combinatio
 | **Vertical**                  | Lookup (`xr_verticalbudgethead`) | Filtered to `Category Type = Vertical`                                                       |
 | **Budget Head**               | Lookup (`xr_verticalbudgethead`) | Filtered to children of selected Vertical                                                    |
 | **Region**                    | Choice                           | e.g. `MMR`                                                                                   |
-| **Evaluated vendor**          | Lookup (`xr_vendoronboarding`)   | Contracted vendor for this bucket limit                                                      |
-| **Approver Role**             | Choice                           | e.g. `Strategy`                                                                              |
 | **Budget (Allocated Amount)** | Currency                         | Base sanctioned amount                                                                       |
 | **Pricing**                   | Currency                         | Base pricing                                                                                 |
 | **Approved Amount**           | Currency                         | Officially approved spend                                                                    |
@@ -77,20 +75,20 @@ Maintains the centralized database of all onboarded vendors based on the onboard
 
 The parent evaluation record. Holds the overall context (project, category, decision) and links to up to 3 vendor detail records.
 
-| Display Name              | Data Type                        | Possible Values / Logical Details                  |
-| :------------------------ | :------------------------------- | :------------------------------------------------- |
-| **xr_vendorevaluationid** | Unique Identifier                | (Primary Key) GUID                                 |
-| **Evaluation Number**     | Auto-number                      | (Unique Text Identifier) e.g., `EVAL-{SEQNUM}`     |
-| **Project**               | Lookup (`xr_project`)            |                                                    |
-| **Vertical**              | Lookup (`xr_verticalbudgethead`) | Filtered to `Category Type = Vertical`             |
-| **Budget Head**           | Lookup (`xr_verticalbudgethead`) | Filtered to children of selected Vertical          |
-| **Sub Budget Head**       | Lookup (`xr_verticalbudgethead`) | Filtered to children of Budget Head (if available) |
-| **Vendor 1 Details**      | Lookup (`xr_vendorevaldetail`)   | Links to the evaluation detail record for Vendor 1 |
-| **Vendor 2 Details**      | Lookup (`xr_vendorevaldetail`)   | Links to the evaluation detail record for Vendor 2 |
-| **Vendor 3 Details**      | Lookup (`xr_vendorevaldetail`)   | Links to the evaluation detail record for Vendor 3 |
-| **Preferred Vendor**      | Choice                           | `Vendor 1`, `Vendor 2`, `Vendor 3`                 |
+| Display Name              | Data Type                        | Possible Values / Logical Details                                  |
+| :------------------------ | :------------------------------- | :----------------------------------------------------------------- |
+| **xr_vendorevaluationid** | Unique Identifier                | (Primary Key) GUID                                                 |
+| **Evaluation Number**     | Auto-number                      | (Unique Text Identifier) e.g., `EVAL-{SEQNUM}`                     |
+| **Project**               | Lookup (`xr_project`)            |                                                                    |
+| **Vertical**              | Lookup (`xr_verticalbudgethead`) | Filtered to `Category Type = Vertical`                             |
+| **Budget Head**           | Lookup (`xr_verticalbudgethead`) | Filtered to children of selected Vertical                          |
+| **Sub Budget Head**       | Lookup (`xr_verticalbudgethead`) | Filtered to children of Budget Head (if available)                 |
+| **Vendor 1 Details**      | Lookup (`xr_vendorevaldetail`)   | Links to the evaluation detail record for Vendor 1                 |
+| **Vendor 2 Details**      | Lookup (`xr_vendorevaldetail`)   | Links to the evaluation detail record for Vendor 2                 |
+| **Vendor 3 Details**      | Lookup (`xr_vendorevaldetail`)   | Links to the evaluation detail record for Vendor 3                 |
+| **Preferred Vendor**      | Choice                           | `Vendor 1`, `Vendor 2`, `Vendor 3`                                 |
 | **Evaluated vendor**      | Lookup (`xr_vendoronboarding`)   | Stores the final evaluated vendor's GUID (`xr_vendoronboardingid`) |
-| **Reason for Preference** | Multiple Lines of Text           |                                                    |
+| **Reason for Preference** | Multiple Lines of Text           |                                                                    |
 
 ---
 
@@ -145,26 +143,26 @@ A child record holding the complete metric profile for a single vendor within an
 
 ---
 
-## 5. Budget / Expense Requisition (`xr_budgetrequisition`)
+## 5. Budget Requisition (`xr_budgetrequisition`)
 
 Consolidates standard Expense Requisitions and specific Vendor Adjustments.
 
-| Display Name                                            | Data Type                        | Possible Values / Logical Details                                           |
-| :------------------------------------------------------ | :------------------------------- | :-------------------------------------------------------------------------- |
-| **xr_budgetrequisitionid**                              | Unique Identifier                | (Primary Key) GUID                                                          |
-| **Requisition Number**                                  | Auto-number                      | (Unique Text Identifier) `REQ-{SEQNUM}`                                     |
-| **Approval Status**                                     | Choice                           | `Pending`, `Approved`, `Rejected`                                           |
-| **Type**                                                | Choice                           | `Expense Requisition`, `Budget Adjustment`                                  |
-| **Project**                                             | Lookup (`xr_project`)            |                                                                             |
-| **Vertical**                                            | Lookup (`xr_verticalbudgethead`) |                                                                             |
-| **Budget Head**                                         | Lookup (`xr_verticalbudgethead`) | *(Also used for Event Type: `CP Meet`, `JBP Meet`, `CP Success Meet`)*      |
-| **Sub Budget Head**                                     | Lookup (`xr_verticalbudgethead`) | *(Also used for Sub Events)*                                                |
-| **Vendor Name**                                         | Lookup (`xr_vendoronboarding`)   |                                                                             |
-| **Start Date**                                          | Date Only                        |                                                                             |
-| **End Date**                                            | Date Only                        |                                                                             |
-| **Requested Parameter**                                 | Decimal Number                   | Amount or Quantity                                                          |
-| **Description**                                         | Multiple Lines of Text           | "Kindly elaborate on the requirement"                                       |
-| **Period** _(Hidden Field - Conditionally Visible)_     | Choice                           | `Daily`, `Monthly`                                                          |
+| Display Name                                        | Data Type                        | Possible Values / Logical Details                                                                                       |
+| :-------------------------------------------------- | :------------------------------- | :---------------------------------------------------------------------------------------------------------------------- |
+| **xr_budgetrequisitionid**                          | Unique Identifier                | (Primary Key) GUID                                                                                                      |
+| **Requisition Number**                              | Auto-number                      | (Unique Text Identifier) `REQ-{SEQNUM}`                                                                                 |
+| **Approval Status**                                 | Choice                           | `Pending`, `Approved`, `Rejected`                                                                                       |
+| **Type**                                            | Choice                           | `Expense Requisition`                                                                                                   |
+| **Project**                                         | Lookup (`xr_project`)            |                                                                                                                         |
+| **Vertical**                                        | Lookup (`xr_verticalbudgethead`) |                                                                                                                         |
+| **Budget Head**                                     | Lookup (`xr_verticalbudgethead`) | _(Also used for Event Type: `CP Meet`, `JBP Meet`, `CP Success Meet`)_                                                  |
+| **Sub Budget Head**                                 | Lookup (`xr_verticalbudgethead`) | _(Also used for Sub Events)_                                                                                            |
+| **Vendor Evaluation**                               | Lookup (`xr_vendorevaluation`)   | Must store the approved vendor evaluation GUID for the same Project, Vertical, Budget Head, and Sub Budget Head context |
+| **Start Date**                                      | Date Only                        |                                                                                                                         |
+| **End Date**                                        | Date Only                        |                                                                                                                         |
+| **Requested Parameter**                             | Decimal Number                   | Amount or Quantity                                                                                                      |
+| **Description**                                     | Multiple Lines of Text           | "Kindly elaborate on the requirement"                                                                                   |
+| **Period** _(Hidden Field - Conditionally Visible)_ | Choice                           | `Daily`, `Monthly`                                                                                                      |
 
 ---
 
@@ -181,7 +179,9 @@ Handles structural shifts, additions, or deductions of budget across hierarchica
 | **Budget Operation**     | Choice                | `Budget Shifting`, `Budget Addition`, `Budget Deduction` |
 | **Amount**               | Currency              | Float/Decimal value                                      |
 
-### 6.1 "From" Context _(Visible on Budget Shifting, Budget Addition, and Budget Deduction)_
+### 6.1 From Context
+
+Applicable for Budget Shifting, Budget Addition, and Budget Deduction.
 
 | Display Name             | Data Type                        | Possible Values / Logical Details |
 | :----------------------- | :------------------------------- | :-------------------------------- |
@@ -189,7 +189,9 @@ Handles structural shifts, additions, or deductions of budget across hierarchica
 | **From Budget Head**     | Lookup (`xr_verticalbudgethead`) |                                   |
 | **From Sub Budget Head** | Lookup (`xr_verticalbudgethead`) | Optional selection                |
 
-### 6.2 "To" Context _(Visible ONLY on Budget Shifting)_
+### 6.2 To Context
+
+Applicable only for Budget Shifting.
 
 | Display Name           | Data Type                        | Possible Values / Logical Details |
 | :--------------------- | :------------------------------- | :-------------------------------- |

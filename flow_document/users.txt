@@ -1,0 +1,12 @@
+Strategy - In project table the employee who is Strategy Approval, security role(strategy manager) need to be provided the correct access
+vertical POCs - will add choice set in the team onboarding table's job profile column, security role for each vertical to be created 
+CPT - will add a column to the project table as CPT Approval, security role need to be created 
+Tech Admin - Who will upload the project wise budget, security role already created as System Administrator
+
+
+Strategy will approve each request from strategy app, will give them forms and subgrid to approve each request, they will be also able to do it from the chanakya app
+Vertical POC, CPT will use chanakya app for all their functions
+Tech admin will have access to app because he is a system admin but he will be uploading the project wise budget from the backend
+
+
+Complex Calculations will be handled through backend plugins, emails or team notifications will be handled through power automate

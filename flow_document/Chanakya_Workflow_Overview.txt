@@ -1,0 +1,89 @@
+CHANAKYA PORTAL - COMPREHENSIVE BUSINESS WORKFLOW & ARCHITECTURE
+================================================================
+
+1. SYSTEM OVERVIEW & KEY ROLES
+------------------------------
+The Chanakya Portal is an internal vendor and expense management tool. 
+- Front-end: Microsoft Power Apps
+- Back-end/Database: SharePoint
+- Logic/Workflows: Microsoft Power Automate
+
+Key Roles (Who Does What):
+* Real Estate Developer (Client): Provides the master budget for a given project (e.g., Kamdhinu developer providing ₹50 Lakhs).
+* Strategy Team / SPOC: The primary decision-makers for a project. They receive the total budget, bifurcate it among different Verticals (e.g., Digital, Marketing), and approve major vendors and financial requests.
+* Vertical Head / POC: The people executing the marketing/sales work (e.g., Digital Marketing Head). They onboard new vendors, request expenses, and consume the budget to hit their goals.
+* CPT (Central Procurement Team): Resolves systemic budget adjustments (like adding or shifting funds). Also kept in the loop (CC'ed) on onboarding.
+
+2. DATABASE & FINANCIAL BUCKETS
+-------------------------------
+To understand how money flows, the system tracks expenses using four main "Buckets" for each combination of Project, Vertical, and Budget Head (Service):
+[Budget]            -> The total limit assigned to a Vertical/Service by Strategy.
+[Available Balance] -> The actual cash currently available to be requested. Drops when new expenses are approved.
+[Approved Amount]   -> Money reserved/pre-approved for a specific timeframe (e.g., monthly) but not entirely spent yet. Think of it like a gift card balance.
+[Consumption]       -> The total money actually spent and burnt by the Vertical Head on daily tasks.
+
+
+3. MODULE 1: VENDOR ONBOARDING
+------------------------------
+* Purpose: To add a new Vendor into the system (No pricing is discussed yet).
+* Business Flow:
+  1. The Vertical Head (Requester) enters vendor details (PAN, Aadhaar, services provided) into the Power Apps form.
+  2. The System validates the PAN and Aadhaar formats to ensure they are correct.
+  3. The System automatically sends an acknowledgement email to the Vertical Head, CC'ing the Strategy SPOC and CPT informing them of the new vendor.
+  4. CPT will approve the vendor.
+
+4. MODULE 2: VENDOR EVALUATION
+------------------------------
+* Purpose: To select and finalize 1 Vendor out of at least 3 onboarded vendors for a specific service based on price and efficiency.
+* Business Flow:
+  1. The Vertical Head (Requester) selects 3 onboarded vendors for a specific vertical/budget head. They input the vendors' pricing (commercials), service details, and specify their "Preferred Vendor" with reasons.
+  2. The System generates an Evaluation Request ID (e.g., REQ-01) and sets the initial status to 'In Progress'.
+  3. The System identifies the Strategy SPOC for that specific project and sends them an Approval Request via Teams/Email.
+  4. The Strategy SPOC evaluates the 3 options (Vendor 1, 2, or 3) and selects the best one based on cost-effectiveness and past performance (or they can 'Reject All').
+  5. If Approved: The chosen vendor is added to the 'Evaluated Vendors' list. The Vertical Head receives an approval email (CC: Strategy, CPT). 
+  6. If Rejected: The request status is updated to 'Rejected' and the Vertical Head is notified.
+
+
+5. MODULE 3: EXPENSE REQUISITION
+--------------------------------
+* Purpose: To actually spend money using the finalized "Evaluated Vendor".
+* Security Feature (The Double-Check): To prevent a negative balance (e.g., two people requesting the last ₹5 Lakhs at the same time), the system checks the Available Balance ONCE before sending the approval email, and a SECOND time right after the Strategy SPOC clicks "Approve". If the balance dropped in the meantime, the system Auto-Rejects the request.
+
+Business Flow by Spending Type:
+  A. Monthly (Pre-Approved / Booking)
+     - Who: Vertical Head requests X amount for Y days.
+     - Action: Sent to Strategy SPOC for approval.
+     - Flow: If approved, X is deducted from [Available Balance] and added to the [Approved Amount]. [Consumption] remains zero.
+  
+  B. Daily (Spending from the Booking)
+     - Who: Vertical Head spends Y amount per day from their already pre-approved monthly bucket.
+     - Action: NO Strategy approval is required, as long as it is within the [Approved Amount] limit.
+     - Flow: Y is deducted from [Approved Amount] and added to [Consumption]. [Available Balance] does not change.
+  
+  C. Direct (One-off Immediate Spends)
+     - Who: Vertical Head requests Z amount immediately for a quick, unbooked service.
+     - Action: Sent to Strategy SPOC for approval.
+     - Flow: If approved, Z is deducted directly from [Available Balance] and added directly to [Consumption]. [Approved Amount] is bypassed entirely.
+Money left in available balance by the end of the month will be addded to next month's budget, (in the new app)
+
+6. MODULE 4: BUDGET ADDITION & SHIFTING
+---------------------------------------
+* Purpose: To modify the project's financial buckets after the initial budget was set.
+* Rules: Money can ONLY be shifted within the same Project. You cannot move funds between different developers' projects.
+
+Business Flow by Type:
+  A. Budget Addition
+     - Scenario: The Developer injects more cash into the project.
+     - Who: CPT (Central Procurement Team) logs the request.
+     - Action: Sends to Strategy SPOC for approval.
+     - Flow: No auto-rejections occur. Once approved, the new money is added to both the Total [Budget] and the [Available Balance] columns.
+     
+  B. Budget Shifting
+     - Scenario: One department has excess funds, and another is running out.
+     - Who: CPT selects a 'From' budget head (giver) and a 'To' budget head (receiver) within the same project.
+     - Action: The System checks if the 'From' bucket has enough [Available Balance] to give away. If it does, approval is sent to Strategy SPOC.
+     - Flow: If approved, the amount is subtracted from the giver's [Budget] and [Available Balance], and added to the receiver's [Budget] and [Available Balance].
+
+
+================================================================
+END OF DOCUMENT

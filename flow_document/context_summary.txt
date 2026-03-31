@@ -1,0 +1,39 @@
+# Chanakya Portal Revamp: Context & Prompt Summary
+
+## Project Context
+The project involves creating a comprehensive flow document for a new Model-Driven Power App called **Chanakya Portal**. The app is designed for internal vendor and expense management at a real estate development firm.
+
+### Key Actors & Roles:
+- **Strategy SPOC:** Decision-maker, approves financial requests.
+- **Vertical POC:** Executes operations (marketing/sales), onboards vendors, requests expenses.
+- **CPT (Central Procurement Team):** Manages structural budget shifts and vendor onboarding approvals.
+- **Tech Admin:** Initializes the system with master budget data.
+
+### Core Modules:
+1. **Module 0: Setup** - Budget upload from SharePoint/Excel to Dataverse.
+2. **Module 1: Vendor Onboarding** - Adding new vendors to the system.
+3. **Module 2: Vendor Evaluation** - Comparing 3 vendors and selecting a preferred one.
+4. **Module 3: Expense Requisition** - Spending against the budget (Monthly, Daily, and Direct paths).
+5. **Module 4: Budget Operations** - Shifting funds or adding new capital.
+
+---
+
+## Prompt History
+
+### Prompt 1
+"I need to create a flow document, of my new chanakya model driven app. In this I'd need to explain the whole flow of my new app... so we are building a model driven app. I want you to create a md document that will explain the flow... tell who will use the app how, where the data will be stored... how approval and requests will be handled etc."
+
+### Prompt 2
+"great, also add each table schema (concisely) and table dataflow diagram (diagram only) in the app flow document"
+
+### Prompt 3
+"document is fine, can you make it more presentable? like it would be used to present the new app, can you do that?"
+
+### Prompt 4
+"nope, you can't just add a few icons and call it presentable, you'd need to restructure it, the content is fine, but it needs to be in a way that I can easily present. simply adding icons won't fix it"
+
+### Prompt 5
+"You cut down a lot of content so it was not good, but adding such type of charts is good, do this add such chart for module 1-4 (don't tinker anything else). also if you could a similar thing (not exactly a chart) for 4, that'd also be nice. for table dataflow diagram remove the mermaid and use this png table_data_flow_diagram.png it is exactly the same as mermaid"
+
+### Prompt 6 (Current)
+"Create a context txt document that will summarise the context and all the prompts I have said so far"
