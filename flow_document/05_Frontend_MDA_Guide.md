@@ -15,6 +15,51 @@ Before you touch the frontend, these must already be done:
 - [x] All 3 Security Roles configured (see `04_Security_Role_Config.md`)
 - [x] You have a Solution created in [make.powerapps.com](https://make.powerapps.com)
 
+## Phase 0.5: Recommended Starting Point After Vendor Onboarding
+
+If the **Vendor Onboarding** form is already built, do **not** jump straight into dashboards or polish. Build the rest of the frontend in the order below so each step unlocks the next one cleanly:
+
+1. Build **Vendor Eval Detail** first.
+   - This is the dependency for Vendor Evaluation.
+   - Finalize which metric sections belong to which Vertical before laying out the form.
+2. Build **Vendor Evaluation** next.
+   - This completes the vendor selection journey end-to-end.
+   - Get the 3-vendor comparison flow working before touching budget screens.
+3. Create the core **Approved/Pending/My** views for:
+   - Vendor Onboarding
+   - Vendor Evaluation
+4. Build **Budget Requisition** after Vendor Evaluation.
+   - This depends on approved evaluation records being available for lookup.
+5. Build **Project Budget** as the read-only financial reference screen.
+   - Users need this view before they can confidently raise requisitions or operations.
+6. Build **Budget Operation** after the Project Budget screen is available.
+   - CPT and Strategy users need budget visibility before shifting or adding funds.
+7. Add **Approve / Reject command bar actions** only after all transactional forms and views are stable.
+8. Add **Dashboard, charts, and final polish** at the very end.
+
+> [!TIP]
+> For your current stage, the best immediate next deliverable is:
+> **Vendor Eval Detail -> Vendor Evaluation -> related Views**
+
+## Frontend Optimization Notes
+
+The original guide is workable, but these adjustments will save rework:
+
+1. **Do not rely on Business Rules for dependent lookup filtering.**
+   - Business Rules can show, hide, lock, and set values.
+   - For dynamic lookup filtering like `Vertical -> Budget Head -> Sub Budget Head` or filtering `Evaluated Vendor`, use **JavaScript form scripts** with `addPreSearch` / custom filters, or configure filtered lookup views where possible.
+2. **Use separate forms for requesters and approvers on approval-heavy tables if needed.**
+   - A single form is fine to start.
+   - But if CPT/Strategy review becomes cluttered, create a compact **Approval Form** for `xr_vendoronboarding`, `xr_vendorevaluation`, `xr_budgetrequisition`, and `xr_budgetoperation`.
+   - For **Vendor Evaluation**, this split is strongly recommended because the Vertical user prepares the request, but the Strategy user performs the actual evaluation decision.
+3. **Treat `xr_vendorevaldetail` as a guided data-entry experience, not a flat long form.**
+   - Group fields into vertical-specific sections.
+   - Hide irrelevant sections aggressively so the form does not become overwhelming.
+4. **Delay dashboards and charts until the transactional experience is working.**
+   - Forms, views, lookup filters, and approval actions matter more than homepage polish.
+5. **Lock down read-only financial screens early.**
+   - `xr_projectbudget` should behave like a reference screen, not an editable form for normal users.
+
 ---
 
 ## Phase 1: Create the Model-Driven App
@@ -134,8 +179,8 @@ Create a new 1-column tab and add these 5 audit fields. **Crucially, set all of 
 #### Step 6: Configure Business Rules
 After publishing the form, go to the table's **Business Rules** tab to add the following logic:
 
-1.  **Auto-filter Budget Head:** Triggered by `Vertical`. Filters `Budget Head` to show children of the selected Vertical.
-2.  **Auto-filter Sub Budget Head:** Triggered by `Budget Head`.
+1.  **Auto-filter Budget Head:** Triggered by `Vertical`. Use **JavaScript lookup filtering**, not a Business Rule, to show only children of the selected Vertical.
+2.  **Auto-filter Sub Budget Head:** Triggered by `Budget Head`. Use **JavaScript lookup filtering** to show only children of the selected Budget Head.
 3.  **Lock Approval fields:** If `Approval Status = Pending`, lock all fields in the "Approval Details" tab.
 4.  **PAN Visibility:** If `GSTIN` is blank, you can hide the `PAN` field. (Extraction logic usually requires a Plugin or Javascript).
 
@@ -147,6 +192,8 @@ After publishing the form, go to the table's **Business Rules** tab to add the f
 
 > [!IMPORTANT]
 > This form is NOT directly accessed via the sitemap. It is opened from within the **Vendor Evaluation** form as an embedded Quick Create or sub-form. Build it first because the Vendor Evaluation form depends on it.
+
+#### Form 3A: Vendor Evaluation - Request Form (Vertical POC)
 
 #### Header Section
 | Field | Notes |
@@ -213,7 +260,7 @@ After publishing the form, go to the table's **Business Rules** tab to add the f
 | Cancellation Policy | Choice (Yes/No) |
 | Remarks | Multi-line Text |
 
-#### Business Rules:
+#### Business Rules / Form Logic:
 1. **Show/Hide vertical-specific sections:** The many fields in this form may not all apply to every vertical (e.g., "SMS Delivery Ratio" only applies to telecaller verticals).
    - **Trigger:** `Vertical` field value
    - **Action:** Show/Hide entire sections based on which Vertical is selected
@@ -223,7 +270,16 @@ After publishing the form, go to the table's **Business Rules** tab to add the f
 
 ### Form 3: Vendor Evaluation (`xr_vendorevaluation`)
 
-**Purpose:** Used by the Vertical POC to compare 3 vendors and propose one for a specific budget context.
+**Purpose:** Used by the Vertical POC to create a vendor evaluation request for a specific budget context by attaching up to 3 vendor comparison records. The Strategy user then reviews those details, performs the actual evaluation, selects the winning vendor, and approves or rejects the request.
+
+> [!IMPORTANT]
+> The role split for this module is:
+> - **Vertical POC:** Creates the request and attaches the 3 vendor detail records
+> - **Strategy:** Reviews the request, evaluates the vendors, sets the decision fields, and approves/rejects
+>
+> For this table, create **2 Main forms**:
+> 1. **Vendor Evaluation - Request Form** for the Vertical POC
+> 2. **Vendor Evaluation - Strategy Review Form** for the Strategy team
 
 #### Header Section
 | Field | Notes |
@@ -231,7 +287,7 @@ After publishing the form, go to the table's **Business Rules** tab to add the f
 | Vendor Evaluation Code | Auto-number. Read-only. This is the Title field. |
 | Approval Status | Read-only. Default = `Pending` |
 
-#### Tab 1: "Evaluation Context"
+#### Tab 1: "Evaluation Request"
 **Section 1.1 – Project Context**
 | Field | Type | Notes |
 | :--- | :--- | :--- |
@@ -250,18 +306,43 @@ After publishing the form, go to the table's **Business Rules** tab to add the f
 **Section 1.3 – Decision**
 | Field | Type | Notes |
 | :--- | :--- | :--- |
-| Preferred Vendor | Choice | `Vendor 1`, `Vendor 2`, `Vendor 3` |
-| Reason for Preference | Multi-line Text | Required |
-| Evaluated Vendor | Lookup (`xr_vendoronboarding`) | **Read-only.** Auto-populated by a plugin/flow on Approval. |
+| Preferred Vendor | Choice | Keep on the table, but hide it on the Vertical POC Request Form |
+| Reason for Preference | Multi-line Text | Keep on the table, but hide it on the Vertical POC Request Form |
+| Final Selected Vendor | Choice | Keep on the table, but hide it on the Vertical POC Request Form |
+| Evaluated Vendor | Lookup (`xr_vendoronboarding`) | Read-only. Keep hidden or read-only on the Request Form |
 
 #### Tab 2: "Approval Details" (Read-Only)
 *(Same pattern as Vendor Onboarding Approval Tab)*
 
+#### Form 3B: Vendor Evaluation - Strategy Review Form
+
+**Purpose:** Used by Strategy to review the submitted request, inspect the 3 vendor detail records, perform the evaluation, and take the approval decision.
+
+#### Header Section
+| Field | Notes |
+| :--- | :--- |
+| Vendor Evaluation Code | Auto-number. Read-only. This is the Title field. |
+| Approval Status | Read-only until Strategy uses Approve/Reject |
+
+#### Tab 1: "Evaluation Review"
+Use the same three sections as the Request Form, but with a different editability model:
+
+- **Project Context:** Keep `Project`, `Vertical`, `Budget Head`, and `Sub Budget Head` visible but **Read-only**
+- **Vendor Comparison:** Keep `Vendor 1 Details`, `Vendor 2 Details`, and `Vendor 3 Details` visible but **Read-only** so Strategy can open each child record and inspect the metrics
+- **Strategy Decision:** Show and allow editing for `Preferred Vendor`, `Reason for Preference`, and `Final Selected Vendor`. Keep `Evaluated Vendor` visible as **Read-only**
+
+#### Tab 2: "Approval Details"
+Add the standard audit fields and keep them read-only except for `Approver Remarks` where needed.
+
 #### Business Rules:
-1. **Auto-filter lookups** (Vertical → Budget Head → Sub Budget Head): Same as Vendor Onboarding form.
-2. **Lock Decision fields until all 3 vendors are filled:**
+1. **Auto-filter lookups** (Vertical → Budget Head → Sub Budget Head): Same as Vendor Onboarding form. Use **JavaScript lookup filtering** rather than Business Rules.
+2. **Lock Strategy decision fields until all 3 vendors are filled:**
    - **Trigger:** `Vendor 1 Details`, `Vendor 2 Details`, or `Vendor 3 Details` is blank
-   - **Action:** Lock the `Preferred Vendor` and `Reason for Preference` fields
+   - **Action:** Lock `Preferred Vendor`, `Reason for Preference`, and `Final Selected Vendor`
+3. **Hide decision fields from the Request Form**
+   - On the Vertical POC Request Form, hide `Preferred Vendor`, `Reason for Preference`, `Final Selected Vendor`, and `Evaluated Vendor`
+4. **Make context and vendor comparison fields read-only on the Strategy Review Form**
+   - Strategy should evaluate the submitted request, not rewrite the request context
 
 ---
 
@@ -310,6 +391,7 @@ After publishing the form, go to the table's **Business Rules** tab to add the f
 3. **Auto-filter `Evaluated Vendor`:**
    - **Trigger:** `Sub Budget Head` (or `Budget Head`) is set
    - **Action:** Filter the `Evaluated Vendor` lookup to only show evaluations that match the same `Project`, `Vertical`, and `Budget Head` context
+   - **Implementation Note:** Use **JavaScript lookup filtering** for this, not a Business Rule
 
 ---
 
@@ -409,9 +491,9 @@ Navigate to your table inside the Solution → **Views** → **New**.
 
 | View Name | Filter | Columns to Show | Used By |
 | :--- | :--- | :--- | :--- |
-| **Pending Evaluations** | `Approval Status = Pending` | Code, Project, Vertical, Budget Head, Preferred Vendor, Requestor, Request Date | Strategy SPOC |
+| **Pending Evaluations** | `Approval Status = Pending` | Code, Project, Vertical, Budget Head, Requestor, Request Date | Strategy SPOC |
 | **Approved Evaluations** | `Approval Status = Approved` | Code, Project, Vertical, Budget Head, Evaluated Vendor, Action Date | Vertical POC, CPT |
-| **My Evaluations** | `Requestor = Current User` | Code, Project, Vertical, Status, Request Date | Vertical POC |
+| **My Evaluation Requests** | `Requestor = Current User` | Code, Project, Vertical, Status, Request Date | Vertical POC |
 
 ---
 
@@ -618,15 +700,15 @@ Before publishing the app, verify the following:
 
 Follow this sequence to avoid dependency errors:
 
-1. ✅ Build **Form: Vendor Eval Detail** (no dependencies)
-2. ✅ Build **Form: Vendor Onboarding** (no dependencies)
-3. ✅ Build **Form: Vendor Evaluation** (depends on Eval Detail form)
-4. ✅ Build **Form: Budget Requisition** (depends on Vendor Evaluation)
-5. ✅ Build **Form: Budget Operation** (no dependencies)
-6. ✅ Build **Form: Project Budget** (no dependencies)
-7. ✅ Build **all Views** for all 6 tables
+1. ✅ Build **Form: Vendor Eval Detail** (first dependency after Vendor Onboarding)
+2. ✅ Build **Form: Vendor Evaluation** (depends on Eval Detail form)
+3. ✅ Build **Views** for Vendor Onboarding and Vendor Evaluation
+4. ✅ Build **Form: Budget Requisition** (depends on approved Vendor Evaluation records)
+5. ✅ Build **Form: Project Budget** (read-only reference screen)
+6. ✅ Build **Form: Budget Operation** (works best after Project Budget is available)
+7. ✅ Build remaining **Views** for Requisition, Operation, and Project Budget
 8. ✅ Create the **Chanakya App** and assemble the Sitemap
 9. ✅ Add **Command Bars** (Approve/Reject) to the app
-10. ✅ Add the **Dashboard** to the app
+10. ✅ Add the **Dashboard** only after the workflows are stable
 11. ✅ **Assign Security Roles** to the app
 12. ✅ **Publish** the app and test with each role
